@@ -1,0 +1,264 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="HrisakDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="tblAddress">
+          <Key>
+            <PropertyRef Name="AddressID" />
+          </Key>
+          <Property Name="AddressID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Street" Type="nvarchar" MaxLength="250" />
+          <Property Name="City" Type="nvarchar" MaxLength="100" />
+          <Property Name="State" Type="nvarchar" MaxLength="2" />
+          <Property Name="ZipCode" Type="nvarchar" MaxLength="10" />
+        </EntityType>
+        <EntityType Name="tblPeople">
+          <Key>
+            <PropertyRef Name="PersonID" />
+          </Key>
+          <Property Name="PersonID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="LastName" Type="nvarchar" MaxLength="100" />
+          <Property Name="FirstName" Type="nvarchar" MaxLength="100" />
+          <Property Name="BirthDate" Type="nvarchar" MaxLength="100" />
+          <Property Name="CellPhone" Type="nvarchar" MaxLength="20" />
+          <Property Name="EmailAddress" Type="nvarchar" MaxLength="265" />
+        </EntityType>
+        <EntityType Name="tblPersonToAddress">
+          <Key>
+            <PropertyRef Name="PersonToAddressID" />
+          </Key>
+          <Property Name="PersonToAddressID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PersonID" Type="int" Nullable="false" />
+          <Property Name="AddressID" Type="int" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'HrisakDB.dbo.vwPeopleEdit' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'HrisakDB.dbo.vwPersonAddressEdit' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'HrisakDB.dbo.vwPersonEdit' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'HrisakDB.dbo.vwPersonMainList' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="vwPersonMainList">
+          <Key>
+            <PropertyRef Name="PersonID" />
+            <PropertyRef Name="PersonToAddressID" />
+            <PropertyRef Name="LastName" />
+            <PropertyRef Name="FirstName" />
+            <PropertyRef Name="Street" />
+            <PropertyRef Name="City" />
+            <PropertyRef Name="State" />
+            <PropertyRef Name="ZipCode" />
+          </Key>
+          <Property Name="PersonID" Type="int" Nullable="false" />
+          <Property Name="LastName" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="FirstName" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Street" Type="nvarchar" MaxLength="250" Nullable="false" />
+          <Property Name="City" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="State" Type="nvarchar" MaxLength="2" Nullable="false" />
+          <Property Name="ZipCode" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="PersonToAddressID" Type="int" Nullable="false" />
+        </EntityType>
+        <Function Name="prAddPersonAddress" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="LastName" Type="nvarchar" Mode="In" />
+          <Parameter Name="FirstName" Type="nvarchar" Mode="In" />
+          <Parameter Name="BirthDate" Type="nvarchar" Mode="In" />
+          <Parameter Name="CellPhone" Type="nvarchar" Mode="In" />
+          <Parameter Name="EmailAddress" Type="nvarchar" Mode="In" />
+          <Parameter Name="Street" Type="nvarchar" Mode="In" />
+          <Parameter Name="City" Type="nvarchar" Mode="In" />
+          <Parameter Name="State" Type="nvarchar" Mode="In" />
+          <Parameter Name="ZipCode" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="prDeletePerson" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="PersonToAddressID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="prGetCityStateFromZip" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Zip" Type="varchar" Mode="In" />
+        </Function>
+        <EntityContainer Name="HrisakDBModelStoreContainer">
+          <EntitySet Name="tblAddress" EntityType="Self.tblAddress" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblPeople" EntityType="Self.tblPeople" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblPersonToAddress" EntityType="Self.tblPersonToAddress" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="vwPersonMainList" EntityType="Self.vwPersonMainList" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [vwPersonMainList].[PersonID] AS [PersonID], 
+    [vwPersonMainList].[LastName] AS [LastName], 
+    [vwPersonMainList].[FirstName] AS [FirstName], 
+    [vwPersonMainList].[Street] AS [Street], 
+    [vwPersonMainList].[City] AS [City], 
+    [vwPersonMainList].[State] AS [State], 
+    [vwPersonMainList].[ZipCode] AS [ZipCode], 
+    [vwPersonMainList].[PersonToAddressID] AS [PersonToAddressID]
+    FROM [dbo].[vwPersonMainList] AS [vwPersonMainList]</DefiningQuery>
+          </EntitySet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="HrisakDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="tblAddress">
+          <Key>
+            <PropertyRef Name="AddressID" />
+          </Key>
+          <Property Name="AddressID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Street" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="City" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="State" Type="String" MaxLength="2" FixedLength="false" Unicode="true" />
+          <Property Name="ZipCode" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="tblPeople">
+          <Key>
+            <PropertyRef Name="PersonID" />
+          </Key>
+          <Property Name="PersonID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="LastName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="FirstName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="BirthDate" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="CellPhone" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="EmailAddress" Type="String" MaxLength="265" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="tblPersonToAddress">
+          <Key>
+            <PropertyRef Name="PersonToAddressID" />
+          </Key>
+          <Property Name="PersonToAddressID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PersonID" Type="Int32" Nullable="false" />
+          <Property Name="AddressID" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityContainer Name="HrisakDBEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="tblAddresses" EntityType="Self.tblAddress" />
+          <EntitySet Name="tblPeoples" EntityType="Self.tblPeople" />
+          <EntitySet Name="tblPersonToAddresses" EntityType="Self.tblPersonToAddress" />
+          <FunctionImport Name="prGetCityStateFromZip" ReturnType="Collection(HrisakDBModel.prGetCityStateFromZip_Result)">
+          <Parameter Name="Zip" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="prAddPersonAddress">
+            <Parameter Name="LastName" Mode="In" Type="String" />
+            <Parameter Name="FirstName" Mode="In" Type="String" />
+            <Parameter Name="BirthDate" Mode="In" Type="String" />
+            <Parameter Name="CellPhone" Mode="In" Type="String" />
+            <Parameter Name="EmailAddress" Mode="In" Type="String" />
+            <Parameter Name="Street" Mode="In" Type="String" />
+            <Parameter Name="City" Mode="In" Type="String" />
+            <Parameter Name="State" Mode="In" Type="String" />
+            <Parameter Name="ZipCode" Mode="In" Type="String" />
+          </FunctionImport>
+          <EntitySet Name="vwPersonMainLists" EntityType="HrisakDBModel.vwPersonMainList" />
+          <FunctionImport Name="prDeletePerson">
+          <Parameter Name="PersonToAddressID" Mode="In" Type="Int32" />
+          </FunctionImport>
+        </EntityContainer>
+        <ComplexType Name="prGetCityStateFromZip_Result">
+          <Property Type="String" Name="City" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="State" Nullable="true" MaxLength="2" />
+        </ComplexType>
+        <EntityType Name="vwPersonMainList">
+          <Key>
+            <PropertyRef Name="PersonID" />
+            <PropertyRef Name="PersonToAddressID" />
+            <PropertyRef Name="LastName" />
+            <PropertyRef Name="FirstName" />
+            <PropertyRef Name="Street" />
+            <PropertyRef Name="City" />
+            <PropertyRef Name="State" />
+            <PropertyRef Name="ZipCode" />
+          </Key>
+          <Property Name="PersonID" Type="Int32" Nullable="false" />
+          <Property Name="LastName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="FirstName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Street" Type="String" MaxLength="250" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="City" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="State" Type="String" MaxLength="2" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ZipCode" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="PersonToAddressID" Type="Int32" Nullable="false" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="HrisakDBModelStoreContainer" CdmEntityContainer="HrisakDBEntities">
+          <EntitySetMapping Name="tblAddresses">
+            <EntityTypeMapping TypeName="HrisakDBModel.tblAddress">
+              <MappingFragment StoreEntitySet="tblAddress">
+                <ScalarProperty Name="AddressID" ColumnName="AddressID" />
+                <ScalarProperty Name="Street" ColumnName="Street" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="ZipCode" ColumnName="ZipCode" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblPeoples">
+            <EntityTypeMapping TypeName="HrisakDBModel.tblPeople">
+              <MappingFragment StoreEntitySet="tblPeople">
+                <ScalarProperty Name="PersonID" ColumnName="PersonID" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="BirthDate" ColumnName="BirthDate" />
+                <ScalarProperty Name="CellPhone" ColumnName="CellPhone" />
+                <ScalarProperty Name="EmailAddress" ColumnName="EmailAddress" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblPersonToAddresses">
+            <EntityTypeMapping TypeName="HrisakDBModel.tblPersonToAddress">
+              <MappingFragment StoreEntitySet="tblPersonToAddress">
+                <ScalarProperty Name="PersonToAddressID" ColumnName="PersonToAddressID" />
+                <ScalarProperty Name="PersonID" ColumnName="PersonID" />
+                <ScalarProperty Name="AddressID" ColumnName="AddressID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="prGetCityStateFromZip" FunctionName="HrisakDBModel.Store.prGetCityStateFromZip">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="HrisakDBModel.prGetCityStateFromZip_Result">
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="State" ColumnName="State" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="prAddPersonAddress" FunctionName="HrisakDBModel.Store.prAddPersonAddress" />
+          <EntitySetMapping Name="vwPersonMainLists">
+            <EntityTypeMapping TypeName="HrisakDBModel.vwPersonMainList">
+              <MappingFragment StoreEntitySet="vwPersonMainList">
+                <ScalarProperty Name="PersonToAddressID" ColumnName="PersonToAddressID" />
+                <ScalarProperty Name="ZipCode" ColumnName="ZipCode" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="Street" ColumnName="Street" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="PersonID" ColumnName="PersonID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="prDeletePerson" FunctionName="HrisakDBModel.Store.prDeletePerson" />
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

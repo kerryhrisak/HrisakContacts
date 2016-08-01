@@ -1,0 +1,61 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+@model IEnumerable<HrisakContacts.Models.vwPersonMainList>
+<div class="jumbotron">
+    <h3>Hrisak App</h3>
+</div>
+
+<div class="row" ng-app="appHrisak" ng-controller="personController as vm">
+    <div class="col-md-12">
+        @Html.ActionLink("Add", "Create", "Person", "", htmlAttributes: new { @class = "btn btn-primary" })
+        <table class="table table-condensed table-striped table-responsive">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.LastName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.FirstName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Street)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.City)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.State)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.ZipCode)
+                    </th>
+                  
+                </tr>
+            </thead>
+            <tbody>
+
+                @foreach (var person in Model)
+                {
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem => person.LastName)</td>
+                        <td>@Html.DisplayFor(modelItem => person.FirstName)</td>
+                        <td>@Html.DisplayFor(modelItem => person.Street)</td>
+                        <td>@Html.DisplayFor(modelItem => person.City)</td>
+                        <td>@Html.DisplayFor(modelItem => person.State)</td>
+                        <td>@Html.DisplayFor(modelItem => person.ZipCode)</td>
+                        <td>@Html.ActionLink("Edit", "View", "Person", new { personID = person.PersonID, personAddressID = person.PersonToAddressID }, new { @class = "btn btn-primary" })</td>
+                        <td><button type="button" class="btn btn-primary" ng-click="vm.deletePerson(@person.PersonToAddressID)">Delete</button></td>
+            </tr>
+                }
+
+            </tbody>
+        </table>
+    </div>
+</div>
+<script src="~/Scripts/angular.min.js"></script>
+<script src="~/Scripts/app.js"></script>
+<script src="~/app/Person/ngEnterDirective.js"></script>
+<script src="~/app/Person/service/personService.js"></script>
+<script src="~/app/Person/controller/personController.js"></script>
